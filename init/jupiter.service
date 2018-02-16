@@ -1,0 +1,15 @@
+[Unit]
+Description=Jupiter DHT Sensor Gateway
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/services/jupiter
+ExecStart=/services/jupiter/jupiter --port 8034 --config config.yml
+Restart=on-failure
+RestartSec=10
+startLimitIntervalSec=60
+
+[Install]
+WantedBy=multi-user.target

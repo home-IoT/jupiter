@@ -1,0 +1,138 @@
+swagger: "2.0"
+info:
+  title: Jupiter
+  version: 0.1.0
+consumes:
+- application/json
+produces:
+- application/json
+schemes:
+- http
+paths:
+  /sensors:
+    get:
+      description: Returns the list of sensors
+      operationId: getSensorsList
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/SensorList'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /sensors/{sensorId}:
+    parameters:
+      - name: sensorId
+        type: string
+        in: path
+        required: true
+    get:
+      description: Returns the data of a particular sensor
+      operationId: getSensorData
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/SensorResponse'
+        404:
+          description: Sensor not found.
+        504:
+          description: Sensor is not available.
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+definitions:
+  SensorList:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/SensorCard'
+      links:
+        $ref: '#/definitions/GenericLinks'
+  SensorCard:
+    type: object
+    required:
+      - id
+      - name
+      - links
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      links:
+        $ref: '#/definitions/GenericLinks'
+  SensorResponse:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: '#/definitions/SensorData'
+      links:
+        $ref: '#/definitions/GenericLinks'
+  SensorData:
+    type: object
+    required:
+      - id
+      - name
+      - temperature
+      - humidity
+      - timestamp
+      - deltaTime
+      - stale
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      temperature:
+        type: number
+      humidity:
+        type: number
+      heatIndex:
+        type: number
+      timestamp:
+        type: string
+        format: date-time
+      deltaTime:
+        type: integer
+      stale:
+        type: boolean
+  GenericLinks:
+    type: object
+    required:
+      - self
+    properties:
+      self:
+        type: string
+  ErrorResponse:
+    type: object
+    required:
+      - errors
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/ErrorObject'
+  ErrorObject:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      detail:
+        type: string
+      code:
+        type: string
+

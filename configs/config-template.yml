@@ -1,0 +1,19 @@
+---
+# server configuration
+server:
+
+  # sensorReadTime is the time delay between reading sensor data in seconds
+  # specify any value larger than zero
+  sensorReadTime: 5
+
+  # sensorTimeout defines the time in minutes after which if a sensor
+  # is still not reachable, it is considered as timed-out
+  sensorTimeout: 60
+
+# list of sensors
+sensors:
+  - id: mock
+    name: Mock sensor
+    host: 127.0.0.1
+    port: 80 # optional (default: 80)
+

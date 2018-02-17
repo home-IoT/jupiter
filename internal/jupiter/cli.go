@@ -11,7 +11,7 @@ var GitRevision string
 var BuildVersion string
 var BuildTime string
 
-type JupiterCommandLineGroup struct {
+type JupiterCommandLineOptions struct {
 	Version    bool   `short:"v" long:"version" description:"Show version"`
 	ConfigFile string `short:"c" long:"config" description:"Config file"`
 }
@@ -19,16 +19,16 @@ type JupiterCommandLineGroup struct {
 var GatewayCommandLineGroup = swag.CommandLineOptionsGroup{
 	ShortDescription: "Jupiter",
 	LongDescription:  "Jupiter options",
-	Options:          new(JupiterCommandLineGroup),
+	Options:          new(JupiterCommandLineOptions),
 }
 
 var CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{
 	GatewayCommandLineGroup,
 }
 
-func GetConfigurationOptions(api *operations.JupiterAPI) *JupiterCommandLineGroup {
+func GetConfigurationOptions(api *operations.JupiterAPI) *JupiterCommandLineOptions {
 	for _, v := range api.CommandLineOptionsGroups {
-		options, ok := v.Options.(*JupiterCommandLineGroup)
+		options, ok := v.Options.(*JupiterCommandLineOptions)
 		if ok {
 			return options
 		}

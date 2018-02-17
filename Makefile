@@ -96,9 +96,10 @@ go-build-mock-mac:
 go-build-mock-all: go-build-mock-pi go-build-mock-linux go-build-mock-windows go-build-mock-mac
 
 MOCK_TARGET ?= $(MOCK)
+DHT22_PACKAGE=github.com/home-IoT/jupiter/internal/dht22
 
-go-build-mock: dep clean
-	go build -i -o ./bin/$(MOCK_TARGET) dht22-mock/cmd/dht22-mock-server/main.go
+go-build-mock: 
+	go build -ldflags="-X $(DHT22_PACKAGE).GitRevision=$(shell git rev-parse HEAD) -X $(DHT22_PACKAGE).BuildVersion=$(VERSION) -X $(DHT22_PACKAGE).BuildTime=$(DATE)" -i -o ./bin/$(MOCK_TARGET) dht22-mock/cmd/dht22-mock-server/main.go
 
 run-mock: go-build-mock
 	./bin/$(MOCK_TARGET) --port 8081

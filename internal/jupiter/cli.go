@@ -1,17 +1,24 @@
 package jupiter
 
 import (
+	"fmt"
 	"github.com/go-openapi/swag"
 	"github.com/home-IoT/jupiter/server/restapi/operations"
+	"os"
 )
 
+var GitRevision string
+var BuildVersion string
+var BuildTime string
+
 type JupiterCommandLineGroup struct {
-	ConfigFile string `short:"c" long:"config" description:"Config file" required:"true"`
+	Version    bool   `short:"v" long:"version" description:"Show version"`
+	ConfigFile string `short:"c" long:"config" description:"Config file"`
 }
 
 var GatewayCommandLineGroup = swag.CommandLineOptionsGroup{
-	ShortDescription: "Gateway",
-	LongDescription:  "Gateway options",
+	ShortDescription: "Jupiter",
+	LongDescription:  "Jupiter options",
 	Options:          new(JupiterCommandLineGroup),
 }
 
@@ -27,4 +34,14 @@ func GetConfigurationOptions(api *operations.JupiterAPI) *JupiterCommandLineGrou
 		}
 	}
 	return nil
+}
+
+func ShowVersion() {
+	fmt.Printf("app version : %s\n", BuildVersion)
+	fmt.Printf("git revision: %s\n", GitRevision)
+	fmt.Printf("build time  : %s\n", BuildTime)
+}
+
+func PrintError(msg string) {
+	fmt.Fprintln(os.Stderr, msg)
 }

@@ -6,6 +6,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 // defaultSensorReadTime holds the default reading time of sensors in seconds
@@ -41,6 +42,16 @@ var Configuration *JupiterConfig
 // Configure configures the server with a given configuration file
 func Configure(api *operations.JupiterAPI) {
 	options := GetConfigurationOptions(api)
+
+	if options.Version {
+		ShowVersion()
+		os.Exit(0)
+	}
+
+	if options.ConfigFile == "" {
+		PrintError("Configuration file is missing. Use flag `-c, --config' to provide a config file.")
+		os.Exit(1)
+	}
 	loadSensorsConfig(options.ConfigFile)
 }
 

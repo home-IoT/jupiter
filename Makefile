@@ -58,7 +58,7 @@ go-build-pi:
 
 go-build-windows:
 	@echo "build windows binary"
-	$(MAKE) go-build GOOS=windows GOARCH=amd64 TARGET=$(PROJECT).exe
+	$(MAKE) go-build GOOS=windows GOARCH=386 TARGET=$(PROJECT).exe
 
 go-build-mac:
 	@echo "build Mac binary"
@@ -67,9 +67,10 @@ go-build-mac:
 go-build-all: go-build-pi go-build-linux go-build-windows go-build-mac
 
 TARGET ?= $(PROJECT)
+JUPITER_PACKAGE=github.com/home-IoT/jupiter/internal/jupiter
 
-go-build: clean dep
-	go build -ldflags="-s -X main.GitRevision=$(shell git rev-parse HEAD) -X main.BuildVersion=$(VERSION) -X main.BuildTime=$(DATE)" -i -o ./bin/$(TARGET) server/cmd/jupiter-server/main.go
+go-build: 
+	go build -ldflags="-X $(JUPITER_PACKAGE).GitRevision=$(shell git rev-parse HEAD) -X $(JUPITER_PACKAGE).BuildVersion=$(VERSION) -X $(JUPITER_PACKAGE).BuildTime=$(DATE)" -i -o ./bin/$(TARGET) server/cmd/jupiter-server/main.go
 
 run: go-build
 	./bin/$(TARGET) --port 8080 -c configs/test.yml

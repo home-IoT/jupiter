@@ -38,6 +38,9 @@ func NewJupiterAPI(spec *loads.Document) *JupiterAPI {
 		GetSensorDataHandler: GetSensorDataHandlerFunc(func(params GetSensorDataParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetSensorData has not yet been implemented")
 		}),
+		GetSensorDataRawHandler: GetSensorDataRawHandlerFunc(func(params GetSensorDataRawParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetSensorDataRaw has not yet been implemented")
+		}),
 		GetSensorsListHandler: GetSensorsListHandlerFunc(func(params GetSensorsListParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetSensorsList has not yet been implemented")
 		}),
@@ -72,6 +75,8 @@ type JupiterAPI struct {
 
 	// GetSensorDataHandler sets the operation handler for the get sensor data operation
 	GetSensorDataHandler GetSensorDataHandler
+	// GetSensorDataRawHandler sets the operation handler for the get sensor data raw operation
+	GetSensorDataRawHandler GetSensorDataRawHandler
 	// GetSensorsListHandler sets the operation handler for the get sensors list operation
 	GetSensorsListHandler GetSensorsListHandler
 
@@ -139,6 +144,10 @@ func (o *JupiterAPI) Validate() error {
 
 	if o.GetSensorDataHandler == nil {
 		unregistered = append(unregistered, "GetSensorDataHandler")
+	}
+
+	if o.GetSensorDataRawHandler == nil {
+		unregistered = append(unregistered, "GetSensorDataRawHandler")
 	}
 
 	if o.GetSensorsListHandler == nil {
@@ -239,6 +248,11 @@ func (o *JupiterAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/sensors/{sensorId}"] = NewGetSensorData(o.context, o.GetSensorDataHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/sensors/{sensorId}/raw"] = NewGetSensorDataRaw(o.context, o.GetSensorDataRawHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)

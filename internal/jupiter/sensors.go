@@ -54,15 +54,14 @@ func GetSensorsList(params serverOps.GetSensorsListParams) middleware.Responder 
 	return serverOps.NewGetSensorsListOK().WithPayload(&sensorList)
 }
 
-// GetSensorData prepares the last reading of a given sensor
-func GetSensorData(params serverOps.GetSensorDataParams) middleware.Responder {
-	sensorId := params.SensorID
+// getSensorData prepares the last reading of a given sensor
+func getSensorData(sensorId string) (*srvModels.SensorData, int) {
 	sensorData, ok := latestSensorsData.SensorsData[sensorId]
 	if !ok {
 		if _, ok := Configuration.Sensors[sensorId]; ok {
-			return serverOps.NewGetSensorDataGatewayTimeout()
+			return nil, 504
 		} else {
-			return serverOps.NewGetSensorDataNotFound()
+			return nil, 404
 		}
 	}
 
@@ -75,11 +74,50 @@ func GetSensorData(params serverOps.GetSensorDataParams) middleware.Responder {
 		defer latestSensorsData.Unlock()
 		delete(latestSensorsData.SensorsData, sensorId)
 
-		return serverOps.NewGetSensorDataGatewayTimeout()
+		return nil, 504
 	}
-	sensorResponse := srvModels.SensorResponse{Data: sensorData, Links: ServerCreateLinksWithSelf(params.HTTPRequest)}
 
-	return serverOps.NewGetSensorDataOK().WithPayload(&sensorResponse)
+	return sensorData, 0
+}
+
+// GetSensorData prepares the last reading of a given sensor
+func GetSensorData(params serverOps.GetSensorDataParams) middleware.Responder {
+	sensorData, errorCode := getSensorData(params.SensorID)
+
+	switch errorCode {
+	case 0:
+		sensorResponse := srvModels.SensorResponse{Data: sensorData, Links: ServerCreateLinksWithSelf(params.HTTPRequest)}
+		return serverOps.NewGetSensorDataOK().WithPayload(&sensorResponse)
+
+	case 504:
+		return serverOps.NewGetSensorDataGatewayTimeout()
+
+	case 404:
+		fallthrough
+
+	default:
+		return serverOps.NewGetSensorDataNotFound()
+	}
+}
+
+// GetSensorDataRaw prepares the last reading of a given sensor
+func GetSensorDataRaw(params serverOps.GetSensorDataRawParams) middleware.Responder {
+	sensorData, errorCode := getSensorData(params.SensorID)
+
+	switch errorCode {
+	case 0:
+		sensorResponse := srvModels.SensorResponseRaw{Temperature: sensorData.Temperature, Humidity: sensorData.Humidity}
+		return serverOps.NewGetSensorDataRawOK().WithPayload(&sensorResponse)
+
+	case 504:
+		return serverOps.NewGetSensorDataRawGatewayTimeout()
+
+	case 404:
+		fallthrough
+
+	default:
+		return serverOps.NewGetSensorDataRawNotFound()
+	}
 }
 
 // StartUpdatingSensorData concurrently updates the sensor data

@@ -44,6 +44,28 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /sensors/{sensorId}/raw:
+    parameters:
+      - name: sensorId
+        type: string
+        in: path
+        required: true
+    get:
+      description: Returns the data of a particular sensor in simple JSON
+      operationId: getSensorDataRaw
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/SensorResponseRaw'
+        404:
+          description: Sensor not found.
+        504:
+          description: Sensor is not available.
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 definitions:
   SensorList:
     type: object
@@ -106,6 +128,16 @@ definitions:
         type: integer
       stale:
         type: boolean
+  SensorResponseRaw:
+    type: object
+    required:
+      - temperature
+      - humidity
+    properties:
+      temperature:
+        type: number
+      humidity:
+        type: number
   GenericLinks:
     type: object
     required:

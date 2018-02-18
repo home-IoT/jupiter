@@ -82,6 +82,40 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/sensors/{sensorId}/raw": {
+      "get": {
+        "description": "Returns the data of a particular sensor in simple JSON",
+        "operationId": "getSensorDataRaw",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SensorResponseRaw"
+            }
+          },
+          "404": {
+            "description": "Sensor not found."
+          },
+          "504": {
+            "description": "Sensor is not available."
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "sensorId",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "definitions": {
@@ -216,6 +250,21 @@ func init() {
         },
         "links": {
           "$ref": "#/definitions/GenericLinks"
+        }
+      }
+    },
+    "SensorResponseRaw": {
+      "type": "object",
+      "required": [
+        "temperature",
+        "humidity"
+      ],
+      "properties": {
+        "humidity": {
+          "type": "number"
+        },
+        "temperature": {
+          "type": "number"
         }
       }
     }

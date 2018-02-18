@@ -45,6 +45,8 @@ func configureAPI(api *operations.JupiterAPI) http.Handler {
 
 	api.GetSensorsListHandler = operations.GetSensorsListHandlerFunc(jupiter.GetSensorsList)
 
+	api.GetSensorDataRawHandler = operations.GetSensorDataRawHandlerFunc(jupiter.GetSensorDataRaw)
+
 	api.ServerShutdown = func() {}
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))

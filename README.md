@@ -11,6 +11,7 @@ The API of the server is defined by the [`api/server.yml`](api/server.yml) Swagg
 
 1. `GET /sensors`: provides the list of sensors that the gateway is aware of. 
 2. `GET /sernsors/{sensor-id}`: provides the latest reading of the sensor identified by the given id. It returns a `504` error if the reading is older than the defined period in `server.sensorTimeout` configuration, or if the sensor has been unreachablethe. 
+3. `GET /sernsors/{sensor-id}/raw`: provides the latest reading of the sensor identified by the given id in a very simple JSON with only two fields (`temperature` and `humidity`). This is useful in connection with other services, such as [Homebridge HTTP Temp/Humidity plugin](https://github.com/lucacri/homebridge-http-temperature-humidity). 
 
 ### Configuration
 The [`configs/config-template.yml`](configs/config-template.yml) offers a template for the service configuration. 

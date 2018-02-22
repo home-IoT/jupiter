@@ -1,0 +1,16 @@
+language: go
+sudo: false
+notifications:
+  email: false
+jobs:
+  include:
+    - stage: test
+      go_import_path: github.com/golang/dep
+      install:
+        - make get-deps
+      os: linux
+      go: 1.10.x
+      script:
+        - make validate
+addons:
+  ssh_known_hosts: github.com

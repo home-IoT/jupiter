@@ -67,7 +67,9 @@ go-fmt:
 	@go fmt $(PKGS)
 
 go-validate:
+	@echo go vet
 	@go vet $(PKGS)
+	@echo golint
 	@golint -set_exit_status $(PKGS)
 
 # --- Jupiter Server

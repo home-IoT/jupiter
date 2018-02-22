@@ -9,7 +9,7 @@ jobs:
       install:
         - make get-tools
       os: linux
-      go: 1.10.x
+      go: 1.9.x
       script:
         - make go-dep go-validate
 addons:

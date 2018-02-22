@@ -53,7 +53,7 @@ dep-clean: clean
 go-fmt:
 	@go fmt $(PKGS)
 
-go-lint:
+go-validate:
 	@go vet $(PKGS)
 	@golint -set_exit_status $(PKGS)
 

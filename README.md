@@ -40,9 +40,9 @@ The sensors are expected to expose their readings as a JSON response to a simple
 There is a mock sensor that offers a constant reading that conforms to the sensor API specificaiton. You can use this for testing. 
 
 ### Run Mock Sensor Service
-You can run the mock service using the Makefile:
+You can build and run the mock service using the Makefile:
 ```
-make run-mock
+make go-build-mock run-mock
 ```
 This will build and run the mock code. 
 

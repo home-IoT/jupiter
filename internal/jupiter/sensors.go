@@ -7,33 +7,34 @@ import (
 	serverOps "github.com/home-IoT/jupiter/server/restapi/operations"
 
 	"fmt"
+	"log"
+	"sync"
+	"time"
+
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"github.com/home-IoT/jupiter/client/client"
-	"log"
-	"sync"
-	"time"
 )
 
-// latestSensorsData keeps the result of the last read of each sensor
-type LatestSensorData struct {
+type latestSensorDataType struct {
 	sync.Mutex
 	SensorsData map[string]*srvModels.SensorData
 }
 
-var latestSensorsData = LatestSensorData{SensorsData: map[string]*srvModels.SensorData{}}
+// latestSensorsData keeps the result of the last read of each sensor
+var latestSensorsData = latestSensorDataType{SensorsData: map[string]*srvModels.SensorData{}}
 
 // sensorsCardList is the list of sensor cards that are known to this service
 var sensorsCardList []*srvModels.SensorCard
 
-type HTTPClients struct {
+type httpClientsType struct {
 	sync.Mutex
 	Clients map[string]*client.Jupiter
 }
 
 // httpClients keeps a client per sensor
-var httpClients = HTTPClients{Clients: map[string]*client.Jupiter{}}
+var httpClients = httpClientsType{Clients: map[string]*client.Jupiter{}}
 
 // StartUpdatingSensorData prepares the sensor data and begins the concurrent threads of updating sensor data
 func StartUpdatingSensorData() {
@@ -55,24 +56,23 @@ func GetSensorsList(params serverOps.GetSensorsListParams) middleware.Responder 
 }
 
 // getSensorData prepares the last reading of a given sensor
-func getSensorData(sensorId string) (*srvModels.SensorData, int) {
-	sensorData, ok := latestSensorsData.SensorsData[sensorId]
+func getSensorData(sensorID string) (*srvModels.SensorData, int) {
+	sensorData, ok := latestSensorsData.SensorsData[sensorID]
 	if !ok {
-		if _, ok := Configuration.Sensors[sensorId]; ok {
+		if _, ok := configuration.Sensors[sensorID]; ok {
 			return nil, 504
-		} else {
-			return nil, 404
 		}
+		return nil, 404
 	}
 
 	deltaTime := time.Since(time.Time(*sensorData.Timestamp)).Minutes()
 
-	if deltaTime > float64(Configuration.Server.SensorTimeout) {
-		fmt.Printf("Removing sensor data for '%s'.", sensorId)
+	if deltaTime > float64(configuration.Server.SensorTimeout) {
+		fmt.Printf("Removing sensor data for '%s'.", sensorID)
 
 		latestSensorsData.Lock()
 		defer latestSensorsData.Unlock()
-		delete(latestSensorsData.SensorsData, sensorId)
+		delete(latestSensorsData.SensorsData, sensorID)
 
 		return nil, 504
 	}
@@ -124,7 +124,7 @@ func GetSensorDataRaw(params serverOps.GetSensorDataRawParams) middleware.Respon
 func updateSensorsData() {
 	c := make(chan *srvModels.SensorData)
 
-	for id, _ := range Configuration.Sensors {
+	for id := range configuration.Sensors {
 		go fetchSensorData(id, c, 0)
 	}
 
@@ -138,7 +138,7 @@ func updateSensorsData() {
 
 			log.Printf("%s: {%v, %v}", *sensorData.ID, *sensorData.Temperature, *sensorData.Humidity)
 		}
-		go fetchSensorData(*sensorData.ID, c, Configuration.Server.SensorReadTime)
+		go fetchSensorData(*sensorData.ID, c, configuration.Server.SensorReadTime)
 	}
 }
 
@@ -167,31 +167,31 @@ func fetchSensorData(id string, c chan *srvModels.SensorData, delayInSeconds int
 		return
 	}
 	// if data is received, update the cache (latestSensorsData)
-	c <- copyClientSensorDataToServerSensorData(Configuration.Sensors[id], resp.Payload, latestSensorsData.SensorsData[id])
+	c <- copyClientSensorDataToServerSensorData(configuration.Sensors[id], resp.Payload, latestSensorsData.SensorsData[id])
 
 	log.Printf("Fetched sensor data for '%s'.", id)
 }
 
-func getHTTPClient(sensorId string) *client.Jupiter {
-	c, ok := httpClients.Clients[sensorId]
+func getHTTPClient(sensorID string) *client.Jupiter {
+	c, ok := httpClients.Clients[sensorID]
 	if !ok {
-		host := Configuration.Sensors[sensorId].Host + ":" + *Configuration.Sensors[sensorId].Port
+		host := configuration.Sensors[sensorID].Host + ":" + *configuration.Sensors[sensorID].Port
 		transport := httptransport.New(host, "/", nil)
 		c = client.New(transport, strfmt.Default)
 		httpClients.Lock()
 		defer httpClients.Unlock()
 
-		httpClients.Clients[sensorId] = c
+		httpClients.Clients[sensorID] = c
 	}
 	return c
 }
 
-func copyClientSensorDataToServerSensorData(config *SensorConfig, src *clientModels.SensorData, dest *srvModels.SensorData) *srvModels.SensorData {
+func copyClientSensorDataToServerSensorData(config *sensorConfig, src *clientModels.SensorData, dest *srvModels.SensorData) *srvModels.SensorData {
 	if dest == nil {
 		dest = new(srvModels.SensorData)
 	}
 
-	var stale bool = (*src.Stale != 0)
+	stale := (*src.Stale != 0)
 	timeNow := strfmt.DateTime(time.Now())
 	dest.ID = &config.ID
 	dest.Name = &config.Name
@@ -221,7 +221,7 @@ func newSensorCard(id string, name string) *srvModels.SensorCard {
 func updateSensorsList() {
 	sensorCards := []*srvModels.SensorCard{}
 
-	for id, sensor := range Configuration.Sensors {
+	for id, sensor := range configuration.Sensors {
 		sensorCards = append(sensorCards, newSensorCard(id, sensor.Name))
 	}
 

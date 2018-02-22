@@ -8,27 +8,33 @@ import (
 	"github.com/home-IoT/jupiter/dht22-mock/restapi/operations"
 )
 
+// GitRevision holds the git revision based on which this service is compiled
 var GitRevision string
+
+// BuildVersion holds the version of this service
 var BuildVersion string
+
+// BuildTime holds the time of build
 var BuildTime string
 
-type MockCommandLineOptions struct {
+type mockCommandLineOptions struct {
 	Version bool `short:"v" long:"version" description:"Show version"`
 }
 
-var MockCommandLineGroup = swag.CommandLineOptionsGroup{
+var mockCommandLineGroup = swag.CommandLineOptionsGroup{
 	ShortDescription: "Mock",
 	LongDescription:  "Mock options",
-	Options:          new(MockCommandLineOptions),
+	Options:          new(mockCommandLineOptions),
 }
 
+// CommandLineOptionsGroups holds the CL option groups
 var CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{
-	MockCommandLineGroup,
+	mockCommandLineGroup,
 }
 
-func GetConfigurationOptions(api *operations.Dht22MockAPI) *MockCommandLineOptions {
+func getConfigurationOptions(api *operations.Dht22MockAPI) *mockCommandLineOptions {
 	for _, v := range api.CommandLineOptionsGroups {
-		options, ok := v.Options.(*MockCommandLineOptions)
+		options, ok := v.Options.(*mockCommandLineOptions)
 		if ok {
 			return options
 		}
@@ -36,8 +42,9 @@ func GetConfigurationOptions(api *operations.Dht22MockAPI) *MockCommandLineOptio
 	return nil
 }
 
+// CheckVersionFlag checks if the version flag is set, prints the version and stops the process
 func CheckVersionFlag(api *operations.Dht22MockAPI) {
-	options := GetConfigurationOptions(api)
+	options := getConfigurationOptions(api)
 
 	if options.Version {
 		showVersion()

@@ -20,10 +20,12 @@ func newMockData() *models.SensorData {
 	return &models.SensorData{Device: &device, DeltaTime: &deltaTime, Stale: &stale, Dht22: &dht}
 }
 
+// GetMockData returns a mock sensor data
 func GetMockData(params operations.GetParams) middleware.Responder {
 	return operations.NewGetOK().WithPayload(newMockData())
 }
 
+// SetConfig pretends to set the network configuration of the sensor
 func SetConfig(params operations.GetConfigParams) middleware.Responder {
 	response := models.ConfigResponse{Ssid: &params.Ssid}
 	return operations.NewGetConfigOK().WithPayload(&response)

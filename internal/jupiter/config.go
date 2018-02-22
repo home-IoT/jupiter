@@ -2,11 +2,12 @@ package jupiter
 
 import (
 	"errors"
-	"github.com/home-IoT/jupiter/server/restapi/operations"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/home-IoT/jupiter/server/restapi/operations"
+	"gopkg.in/yaml.v2"
 )
 
 // defaultSensorReadTime holds the default reading time of sensors in seconds
@@ -15,47 +16,47 @@ const defaultSensorReadTimeInSeconds int64 = 30
 // defaultSensorTimeoutInMinutes holds the default sensor read timeout duration in minutes
 const defaultSensorTimeoutInMinutes int64 = 60
 
-type SensorConfig struct {
+type sensorConfig struct {
 	ID   string  `yaml:"id"`
 	Name string  `yaml:"name"`
 	Host string  `yaml:"host"`
 	Port *string `yaml:"port,omitempty"`
 }
 
-type ServerConfig struct {
+type serverConfig struct {
 	SensorReadTime int64 `yaml:"sensorReadTime"`
 	SensorTimeout  int64 `yaml:"sensorTimeout"`
 }
 
 type jupiterConfigYAML struct {
-	Server  ServerConfig    `yaml:"server,omitempty"`
-	Sensors []*SensorConfig `yaml:"sensors"`
+	Server  serverConfig    `yaml:"server,omitempty"`
+	Sensors []*sensorConfig `yaml:"sensors"`
 }
 
-type JupiterConfig struct {
-	Sensors map[string]*SensorConfig
-	Server  *ServerConfig
+type jupiterConfig struct {
+	Sensors map[string]*sensorConfig
+	Server  *serverConfig
 }
 
-var Configuration *JupiterConfig
+var configuration *jupiterConfig
 
 // Configure configures the server with a given configuration file
 func Configure(api *operations.JupiterAPI) {
-	options := GetConfigurationOptions(api)
+	options := getConfigurationOptions(api)
 
 	if options.Version {
-		ShowVersion()
+		showVersion()
 		os.Exit(0)
 	}
 
 	if options.ConfigFile == "" {
-		PrintError("Configuration file is missing. Use flag `-c, --config' to provide a config file.")
+		printError("Configuration file is missing. Use flag `-c, --config' to provide a config file.")
 		os.Exit(1)
 	}
 	loadSensorsConfig(options.ConfigFile)
 }
 
-func loadSensorsConfig(configFile string) (*JupiterConfig, error) {
+func loadSensorsConfig(configFile string) (*jupiterConfig, error) {
 
 	file, err := ioutil.ReadFile(configFile)
 	if err != nil {
@@ -67,17 +68,17 @@ func loadSensorsConfig(configFile string) (*JupiterConfig, error) {
 	err = yaml.Unmarshal(file, config)
 	if err != nil {
 		log.Println(err)
-		return nil, errors.New("Error loading the configuration file.")
+		return nil, errors.New("error loading the configuration file")
 	}
 
-	Configuration = processConfigYAML(config)
+	configuration = processConfigYAML(config)
 
-	return Configuration, nil
+	return configuration, nil
 }
 
-func processConfigYAML(yamlConfig *jupiterConfigYAML) *JupiterConfig {
-	config := new(JupiterConfig)
-	config.Sensors = make(map[string]*SensorConfig)
+func processConfigYAML(yamlConfig *jupiterConfigYAML) *jupiterConfig {
+	config := new(jupiterConfig)
+	config.Sensors = make(map[string]*sensorConfig)
 
 	for _, v := range yamlConfig.Sensors {
 		config.Sensors[v.ID] = v

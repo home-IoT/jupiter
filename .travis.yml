@@ -12,5 +12,38 @@ jobs:
       go: 1.9.x
       script:
         - make go-dep go-validate
+    - go: 1.9.x
+      stage: deploy
+      go_import_path: github.com/home-IoT/jupiter
+      install: skip
+      script: skip
+      before_deploy:
+        - make go-release-all
+      deploy:
+        - provider: releases
+          api_key:
+            secure: To_be_done
+          file:
+            - release/jupiter-darwin-amd64
+            - release/jupiter-darwin-amd64.sha256
+            - release/jupiter-linux-amd64
+            - release/jupiter-linux-amd64.sha256
+            - release/jupiter-linux-arm7
+            - release/jupiter-linux-arm7.sha256
+            - release/jupiter-windows-386.exe
+            - release/jupiter-windows-386.exe.sha256
+            - release/dht22-mock-darwin-amd64
+            - release/dht22-mock-darwin-amd64.sha256
+            - release/dht22-mock-linux-amd64
+            - release/dht22-mock-linux-amd64.sha256
+            - release/dht22-mock-linux-arm7
+            - release/dht22-mock-linux-arm7.sha256
+            - release/dht22-mock-windows-386
+            - release/dht22-mock-windows-386.sha256
+          skip_cleanup: true
+          on:
+            repo: home-IoT/jupiter
+            branch: master
+            tags: true
 addons:
   ssh_known_hosts: github.com

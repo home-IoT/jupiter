@@ -12,6 +12,8 @@ MOCK=dht22-mock
 
 PKGS := $(shell go list ./... | grep -vF /vendor/)
 
+JUPITER_PACKAGE=github.com/home-IoT/jupiter/internal/jupiter
+
 # --- Repo 
 
 initialize: clean swagger-generate
@@ -19,6 +21,7 @@ initialize: clean swagger-generate
 	$(MAKE) dep
 
 clean:
+	mkdir -p bin
 	rm -rf ./bin/*
 	rm -rf ./pkg/*
 
@@ -76,27 +79,26 @@ go-validate:
 
 go-build-linux:
 	@echo "build linux binary"
-	$(MAKE) go-build GOOS=linux GOARCH=amd64 TARGET=$(PROJECT)_linux
+	$(MAKE) go-build GOOS=linux GOARCH=amd64 TARGET=$(PROJECT)-linux-amd64
 
 go-build-pi:
 	@echo "build linux binary for raspberry pi"
-	$(MAKE) go-build GOOS=linux GOARCH=arm GOARM=7 TARGET=$(PROJECT)_pi
+	$(MAKE) go-build GOOS=linux GOARCH=arm GOARM=7 TARGET=$(PROJECT)-linux-arm7
 
 go-build-windows:
 	@echo "build windows binary"
-	$(MAKE) go-build GOOS=windows GOARCH=386 TARGET=$(PROJECT).exe
+	$(MAKE) go-build GOOS=windows GOARCH=386 TARGET=$(PROJECT)-windows-386.exe
 
 go-build-mac:
 	@echo "build Mac binary"
-	$(MAKE) go-build GOOS=darwin GOARCH=amd64 TARGET=$(PROJECT)_darwin
-
-go-build-all: go-build-pi go-build-linux go-build-windows go-build-mac
+	$(MAKE) go-build GOOS=darwin GOARCH=amd64 TARGET=$(PROJECT)-darwin-amd64
 
 TARGET ?= $(PROJECT)
-JUPITER_PACKAGE=github.com/home-IoT/jupiter/internal/jupiter
 
 go-build: 
 	go build -ldflags="-X $(JUPITER_PACKAGE).GitRevision=$(shell git rev-parse HEAD) -X $(JUPITER_PACKAGE).BuildVersion=$(VERSION) -X $(JUPITER_PACKAGE).BuildTime=$(DATE)" -i -o ./bin/$(TARGET) server/cmd/jupiter-server/main.go
+
+go-build-all: go-build-pi go-build-linux go-build-windows go-build-mac
 
 run: go-build
 	./bin/$(TARGET) --port 8080 -c configs/test.yml
@@ -105,21 +107,19 @@ run: go-build
 
 go-build-mock-linux:
 	@echo "build linux binary"
-	$(MAKE) go-build-mock GOOS=linux GOARCH=amd64 MOCK_TARGET=$(MOCK)_linux
+	$(MAKE) go-build-mock GOOS=linux GOARCH=amd64 MOCK_TARGET=$(MOCK)-linux-amd64
 
 go-build-mock-pi:
 	@echo "build linux binary for raspberry pi"
-	$(MAKE) go-build-mock GOOS=linux GOARCH=arm GOARM=7 MOCK_TARGET=$(MOCK)_pi
+	$(MAKE) go-build-mock GOOS=linux GOARCH=arm GOARM=7 MOCK_TARGET=$(MOCK)-linux-arm7
 
 go-build-mock-windows:
 	@echo "build windows binary"
-	$(MAKE) go-build-mock GOOS=windows GOARCH=amd64 MOCK_TARGET=$(MOCK).exe
+	$(MAKE) go-build-mock GOOS=windows GOARCH=386 MOCK_TARGET=$(MOCK)-windows-386
 
 go-build-mock-mac:
 	@echo "build Mac binary"
-	$(MAKE) go-build-mock GOOS=darwin GOARCH=amd64 MOCK_TARGET=$(MOCK)_darwin
-
-go-build-mock-all: go-build-mock-pi go-build-mock-linux go-build-mock-windows go-build-mock-mac
+	$(MAKE) go-build-mock GOOS=darwin GOARCH=amd64 MOCK_TARGET=$(MOCK)-darwin-amd64
 
 MOCK_TARGET ?= $(MOCK)
 DHT22_PACKAGE=github.com/home-IoT/jupiter/internal/dht22
@@ -127,6 +127,20 @@ DHT22_PACKAGE=github.com/home-IoT/jupiter/internal/dht22
 go-build-mock: 
 	go build -ldflags="-X $(DHT22_PACKAGE).GitRevision=$(shell git rev-parse HEAD) -X $(DHT22_PACKAGE).BuildVersion=$(VERSION) -X $(DHT22_PACKAGE).BuildTime=$(DATE)" -i -o ./bin/$(MOCK_TARGET) dht22-mock/cmd/dht22-mock-server/main.go
 
+go-build-mock-all: go-build-mock-pi go-build-mock-linux go-build-mock-windows go-build-mock-mac
+
 run-mock: 
 	./bin/$(MOCK_TARGET) --port 8081
+
+# --- Release
+
+go-release-all: clean 
+	$(MAKE) go-build-all
+	$(MAKE) go-build-mock-all
+	mkdir -p ./release
+	rm -rf ./release/*
+	chmod +x bin/*
+	cp ./bin/* ./release
+	for bf in ./release/*; do shasum -a 256 "$$bf" > "$$bf".sha256; done
+
 

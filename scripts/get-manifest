@@ -13,13 +13,8 @@ SCRIPT_NAME="get-manifest"
 
 source ${SCRIPT_DIR}/common
 
-REPO_DIR=$("${SCRIPT_DIR}/check-repo-dir" "$1")
-CHECK_DIR="$?"
-if [ "$CHECK_DIR" != "0" ]
-then
-  showUsage ${BASH_SOURCE[0]}
-  exit 1
-fi
+# sets the REPO_DIR
+getRepoDir "${BASH_SOURCE[0]}" "$1"
 
 MAN_FILE=${REPO_DIR}/MANIFEST
 

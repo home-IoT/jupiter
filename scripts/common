@@ -41,6 +41,20 @@ ensureCleanDevelopBranch() {
   cd "${ensureCleanDevelopBranch_CUR_DIR}"
 }
 
+# finds and/or validates the repository directory
+getRepoDir() {
+  grd_SCRIPT="$1"
+  REPO_DIR="$2"
+  grd_SCRIPT_DIR="$( cd "$( dirname "${grd_SCRIPT}" )" && pwd )"
+  REPO_DIR=$("${grd_SCRIPT_DIR}/check-repo-dir" "${REPO_DIR}")
+  grd_CHECK_DIR="$?"
+  if [ "$grd_CHECK_DIR" != "0" ]
+  then
+    showUsage ${grd_SCRIPT}
+    exit 1
+  fi
+}
+
 if [ "$1" == "--sub-script" ]
 then
   SUB_SCRIPT="true"

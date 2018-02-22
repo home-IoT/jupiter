@@ -14,8 +14,10 @@ SCRIPT_NAME="get-service-version"
 
 source ${SCRIPT_DIR}/common
 
-REPO="$1"
-MANIFEST_FILE=$("${SCRIPT_DIR}/get-manifest" "$1")
+# sets the REPO_DIR
+getRepoDir "${BASH_SOURCE[0]}" "$1"
+
+MANIFEST_FILE=$("${SCRIPT_DIR}/get-manifest" "${REPO_DIR}")
 CHECK_MANIFEST="$?"
 if [ "$CHECK_MANIFEST" != "0" ]
 then

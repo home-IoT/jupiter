@@ -11,7 +11,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SCRIPT_NAME="get-manifest"
 
-source ${SCRIPT_DIR}/common
+source ${SCRIPT_DIR}/common.sh
 
 # sets the REPO_DIR
 getRepoDir "${BASH_SOURCE[0]}" "$1"

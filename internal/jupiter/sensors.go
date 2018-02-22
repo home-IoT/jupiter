@@ -8,6 +8,7 @@ import (
 
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 	"time"
 
@@ -175,7 +176,12 @@ func fetchSensorData(id string, c chan *srvModels.SensorData, delayInSeconds int
 func getHTTPClient(sensorID string) *client.Jupiter {
 	c, ok := httpClients.Clients[sensorID]
 	if !ok {
-		host := configuration.Sensors[sensorID].Host + ":" + *configuration.Sensors[sensorID].Port
+		port := ":"
+		if configuration.Sensors[sensorID].Port != nil &&
+			strings.TrimSpace(*configuration.Sensors[sensorID].Port) != "" {
+			port = ":" + *configuration.Sensors[sensorID].Port
+		}
+		host := configuration.Sensors[sensorID].Host + port
 		transport := httptransport.New(host, "/", nil)
 		c = client.New(transport, strfmt.Default)
 		httpClients.Lock()

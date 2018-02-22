@@ -9,7 +9,7 @@
 #
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SCRIPT_NAME="get-manifest"
+SCRIPT_NAME="get-manifest.sh"
 
 source ${SCRIPT_DIR}/common.sh
 

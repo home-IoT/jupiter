@@ -46,7 +46,7 @@ getRepoDir() {
   grd_SCRIPT="$1"
   REPO_DIR="$2"
   grd_SCRIPT_DIR="$( cd "$( dirname "${grd_SCRIPT}" )" && pwd )"
-  REPO_DIR=$("${grd_SCRIPT_DIR}/check-repo-dir" "${REPO_DIR}")
+  REPO_DIR=$("${grd_SCRIPT_DIR}/check-repo-dir.sh" "${REPO_DIR}")
   grd_CHECK_DIR="$?"
   if [ "$grd_CHECK_DIR" != "0" ]
   then

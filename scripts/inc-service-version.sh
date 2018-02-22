@@ -10,7 +10,7 @@
 #
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SCRIPT_NAME="inc-service-version"
+SCRIPT_NAME="inc-service-version.sh"
 
 source ${SCRIPT_DIR}/common.sh
 
@@ -41,7 +41,7 @@ fi
 # sets the REPO_DIR
 getRepoDir "${BASH_SOURCE[0]}" "${REPO_DIR}"
 
-VERSION=$("${SCRIPT_DIR}/get-service-version" "${REPO_DIR}")
+VERSION=$("${SCRIPT_DIR}/get-service-version.sh" "${REPO_DIR}")
 CHECK_VERSION="$?"
 if [ "$CHECK_VERSION" != "0" ]
 then
@@ -49,7 +49,7 @@ then
   exit 1
 fi
 
-MAN_FILE=$("${SCRIPT_DIR}/get-manifest" "${REPO_DIR}")
+MAN_FILE=$("${SCRIPT_DIR}/get-manifest.sh" "${REPO_DIR}")
 CHECK_MANIFEST="$?"
 if [ "$CHECK_MANIFEST" != "0" ]
 then
@@ -114,7 +114,7 @@ esac
 # check the new version
 VERSION=""
 CHECK_VERSION=""
-VERSION=$("${SCRIPT_DIR}/get-service-version" "${REPO_DIR}")
+VERSION=$("${SCRIPT_DIR}/get-service-version.sh" "${REPO_DIR}")
 CHECK_VERSION="$?"
 if [ "$CHECK_VERSION" != "0" ]
 then

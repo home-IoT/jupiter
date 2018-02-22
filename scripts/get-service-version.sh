@@ -10,14 +10,14 @@
 #
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SCRIPT_NAME="get-service-version"
+SCRIPT_NAME="get-service-version.sh"
 
 source ${SCRIPT_DIR}/common.sh
 
 # sets the REPO_DIR
 getRepoDir "${BASH_SOURCE[0]}" "$1"
 
-MANIFEST_FILE=$("${SCRIPT_DIR}/get-manifest" "${REPO_DIR}")
+MANIFEST_FILE=$("${SCRIPT_DIR}/get-manifest.sh" "${REPO_DIR}")
 CHECK_MANIFEST="$?"
 if [ "$CHECK_MANIFEST" != "0" ]
 then

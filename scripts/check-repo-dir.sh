@@ -13,7 +13,7 @@
 #
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SCRIPT_NAME="check-repo-dir"
+SCRIPT_NAME="check-repo-dir.sh"
 
 source ${SCRIPT_DIR}/common.sh
 

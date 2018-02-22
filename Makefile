@@ -10,6 +10,8 @@ CLIENT_SWAGGER_FILE=api/client.yml
 
 MOCK=dht22-mock
 
+PKGS := $(shell go list ./... | grep -vF /vendor/)
+
 initialize: clean swagger-generate
 	dep init
 	$(MAKE) dep
@@ -45,6 +47,15 @@ dep-clean: clean
 	mkdir -p ./bin
 	rm -rf ./vendor/*
 	dep ensure
+
+# --- Common Go
+
+go-fmt:
+	@go fmt $(PKGS)
+
+go-lint:
+	@go vet $(PKGS)
+	@golint -set_exit_status $(PKGS)
 
 # --- Jupiter Server
 

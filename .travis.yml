@@ -7,10 +7,10 @@ jobs:
     - stage: test
       go_import_path: github.com/golang/dep
       install:
-        - make get-deps
+        - make get-tools
       os: linux
       go: 1.10.x
       script:
-        - make validate
+        - make go-dep go-validate
 addons:
   ssh_known_hosts: github.com

@@ -12,6 +12,8 @@ MOCK=dht22-mock
 
 PKGS := $(shell go list ./... | grep -vF /vendor/)
 
+# --- Repo 
+
 initialize: clean swagger-generate
 	dep init
 	$(MAKE) dep
@@ -19,6 +21,17 @@ initialize: clean swagger-generate
 clean:
 	rm -rf ./bin/*
 	rm -rf ./pkg/*
+
+# --- Tools
+
+get-tools:
+	go get -u github.com/golang/lint/golint
+	go get -u github.com/golang/dep/cmd/dep
+
+# --- Swagger
+
+get-swagger:
+	go get -u github.com/go-swagger/go-swagger/cmd/swagger
 
 swagger-serve:
 	swagger serve $(SERVER_SWAGGER_FILE)
@@ -37,18 +50,18 @@ swagger-gen-client: clean
 swagger-gen-mock: clean
 	swagger generate server -f $(CLIENT_SWAGGER_FILE) -t dht22-mock -A dht22-mock
 
-dep:
+# --- Common Go
+
+go-dep:
 	dep ensure
 
-dep-status:
+go-dep-status:
 	dep status
 
-dep-clean: clean
+go-dep-clean: clean
 	mkdir -p ./bin
 	rm -rf ./vendor/*
 	dep ensure
-
-# --- Common Go
 
 go-fmt:
 	@go fmt $(PKGS)

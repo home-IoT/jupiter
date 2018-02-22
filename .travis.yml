@@ -22,7 +22,7 @@ jobs:
       deploy:
         - provider: releases
           api_key:
-            secure: To_be_done
+            secure: IKxJFt4L+kUjlsq68LsfnTUTr9/Nm81DPJOaEvWhNeCrE16vfGg4DLqEF0BtCa1aMEpWc5CoYXNq06DKHpX3bKa2fhFV5wo7D9RbI+FO5KMELvO8+SsSkLGTS8fGP+CkycTrSZnlq7DNt2hUT+2a88VhCeMHzBxICTge/ptLc3NQpvfHxrgqclGIPjnGEOxyJVyzyN11fJGsyWWBxzNRUWxfPlheKNB8wvtBBM3jorIjgsm+1sHVyCQVUpB9RnY/zbEaESUT0AfNkAtoY8c1uoVI9W+wsPlgqow3swkihxEYtcIHjg562txAUZjOeZSt5mfi1vSnp9UCj5SVnCeyTzGbe+EjnloRlZsoWlz0/PmmhRe01D1KXOmU8CgRnnv4dEKtLOhYP/LDZdBrIYYB4tN67Exmb9LnipedYQlEJOXAZIvXLudb/df7sNr7NNWfs4pK96upk36R+ExygTtIP0tnalxJSvOrvq69LZ9OKVaQjPW/LJlp49uaDY0/XHGw2jWNfIp9ooFRScfXUNGg5BNYdjdyxMtHk3pQ3CDUhsCHtXr5BJ/Ssmr/4Bwu+PHMQ+hdUyYN5dicUjU45kEmDJOPHgcx7gl9hPNIMxGoWa5nsRiy+tM3NeaibkcM9EKEVHEls+zF3nSE0/Mjp1aIC1J5Mau9+4NhSHesjvGt+LI=
           file:
             - release/jupiter-darwin-amd64
             - release/jupiter-darwin-amd64.sha256
@@ -47,3 +47,4 @@ jobs:
             tags: true
 addons:
   ssh_known_hosts: github.com
+

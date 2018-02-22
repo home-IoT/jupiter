@@ -15,13 +15,7 @@ SCRIPT_NAME="inc-service-version.sh"
 source ${SCRIPT_DIR}/common.sh
 
 # Get OS family
-unamestr=$(uname)
-
-if [ "$unamestr" != "Darwin" ] && [ "$unamestr" != "Linux" ]
-then
-  printError "This script can only run on Linux or MacOS."
-  exit 1
-fi
+checkOSFamily
 
 if [ $# == 0 ]
 then 
@@ -97,9 +91,6 @@ else
   NEW_VERSION=${NEW_VERSION%-*}
 fi
 
-# Get OS family
-unamestr=$(uname)
-
 # update MANIFEST files
 case "$unamestr" in 
   "Darwin")
@@ -130,5 +121,7 @@ then
 fi
 
 cd "${REPO_DIR}"
-
-git add . && git commit -m "update version to ${NEW_VERSION}. [automated version updated]" && exit 0
+ 
+git add . \
+  && git commit -m "update version to ${NEW_VERSION}. [automated version updated]" \
+  && exit 0

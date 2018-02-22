@@ -55,8 +55,13 @@ getRepoDir() {
   fi
 }
 
-if [ "$1" == "--sub-script" ]
-then
-  SUB_SCRIPT="true"
-  shift
-fi
+checkOSFamily() {
+  # Get OS family
+  unamestr=$(uname)
+
+  if [ "$unamestr" != "Darwin" ] && [ "$unamestr" != "Linux" ]
+  then
+    printError "This script can only run on Linux or MacOS."
+    exit 1
+  fi
+}

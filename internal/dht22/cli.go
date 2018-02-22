@@ -2,9 +2,10 @@ package dht22
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/go-openapi/swag"
 	"github.com/home-IoT/jupiter/dht22-mock/restapi/operations"
-	"os"
 )
 
 var GitRevision string

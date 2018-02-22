@@ -20,7 +20,7 @@ source ${SCRIPT_DIR}/common
 REPO_DIR="$1"
 if [ -z "${REPO_DIR}" ]
 then
-  REPO_DIR=$PWD
+  REPO_DIR=$(git rev-parse --show-toplevel)
 fi
 
 if [ ! -d "${REPO_DIR}" ]

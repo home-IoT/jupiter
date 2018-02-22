@@ -5,7 +5,7 @@ notifications:
 jobs:
   include:
     - stage: test
-      go_import_path: github.com/golang/dep
+      go_import_path: github.com/home-IoT/jupiter
       install:
         - make get-tools
       os: linux

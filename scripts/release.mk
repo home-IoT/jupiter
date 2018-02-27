@@ -25,7 +25,7 @@ release-inc-patch-version:
 	$(RELEASE_SCRIPTS_DIR)/inc-service-version.sh $(REPO) --patch
 
 release-commit-version:
-	@$(RELEASE_SCRIPTS_DIR)/commit-current-version $(REPO)
+	@$(RELEASE_SCRIPTS_DIR)/commit-tag-version.sh $(REPO)
 
 # tag and push (mainly for set-idea-multi)
 .PHONY: release-major-version release-minor-version release-patch-version

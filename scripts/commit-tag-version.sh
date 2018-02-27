@@ -42,9 +42,5 @@ fi
 
 git push \
   && git tag -a "${VERSION}" -m "Version ${VERSION}" \
-  && git push --tags \
+  && git push origin --tags \
   && exit 0
-
-
-
-git 

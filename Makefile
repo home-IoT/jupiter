@@ -1,4 +1,5 @@
 include ./MANIFEST
+include ./scripts/release.mk
 
 DATE := $(shell date | sed 's/\ /_/g')
 

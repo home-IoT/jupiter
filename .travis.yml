@@ -43,7 +43,7 @@ jobs:
           skip_cleanup: true
           on:
             repo: home-IoT/jupiter
-            branch: master
+            branch: develop
             tags: true
 addons:
   ssh_known_hosts: github.com

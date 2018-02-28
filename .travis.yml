@@ -11,14 +11,14 @@ jobs:
       os: linux
       go: 1.9.x
       script:
-        - make go-dep go-validate
+        - make go-dep go-validate go-release-all
     - go: 1.9.x
       stage: deploy
       go_import_path: github.com/home-IoT/jupiter
       install: skip
       script: skip
       before_deploy:
-        - make go-release-all
+        - make clean get-tools go-dep go-release-all
       deploy:
         - provider: releases
           api_key:

@@ -8,15 +8,18 @@
 CHILD_SCRIPT=""
 CUR_DIR="$PWD"
 
+# print an error message to stderr
 printError() {
   (>&2 echo "ERROR: $*")
 }
 
+# show usage of the tool
 showUsage() {
   MSG=$(grep -e '^# Usage' "$1" | sed 's/^#\ //')
   (>&2 echo "$MSG")
 }
 
+# ensure that we are on a develop branch and that there is no uncommitted changes
 ensureCleanDevelopBranch() {
   REPO_DIR="$1"
   ensureCleanDevelopBranch_CUR_DIR="$PWD"
@@ -55,6 +58,7 @@ getRepoDir() {
   fi
 }
 
+# make sure that the OS is either Linux or MacOS
 checkOSFamily() {
   # Get OS family
   unamestr=$(uname)

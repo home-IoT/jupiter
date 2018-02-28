@@ -32,7 +32,8 @@ fi
 ensureCleanDevelopBranch "${REPO_DIR}"
 
 cd "${REPO_DIR}"
- 
+
+# check if the tag is new
 git tag --list | grep -q "${VERSION}" 
 if [ "$?" == "0" ]
 then 
@@ -40,6 +41,7 @@ then
   exit 1
 fi
 
+# push the history, tag the current commit and push the tag to remote
 git push \
   && git tag -a "${VERSION}" -m "Version ${VERSION}" \
   && git push origin --tags \

@@ -18,7 +18,7 @@ jobs:
       install: skip
       script: skip
       before_deploy:
-        - make go-release-all
+        - make clean get-tools go-dep go-release-all
       deploy:
         - provider: releases
           api_key:

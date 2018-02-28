@@ -1,4 +1,8 @@
 # Jupiter - DYI Home Automation Temperature and Humidity Gateway
+    
+| `master`   | `develop`     |
+| ---------- | --------------|
+| [![Build Status](https://travis-ci.org/home-IoT/jupiter.svg?branch=master)](https://travis-ci.org/home-IoT/jupiter) | [![Build Status](https://travis-ci.org/home-IoT/jupiter.svg?branch=develop)](https://travis-ci.org/home-IoT/jupiter) |
 
 This is a very simple gateway service to a collection of HT sensors. The server offers a simple REST API to the sensors. The responses follow the the suggestions of the [{json:api}](http://jsonapi.org) specification. 
 

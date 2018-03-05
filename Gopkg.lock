@@ -14,6 +14,12 @@
   revision = "de5bf2ad457846296e2031421a34e2568e304e35"
 
 [[projects]]
+  name = "github.com/Sirupsen/logrus"
+  packages = ["."]
+  revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
+  version = "v1.0.4"
+
+[[projects]]
   name = "github.com/asaskevich/govalidator"
   packages = ["."]
   revision = "521b25f4b05fd26bec69d9dedeb8f9c9a83939a8"
@@ -125,6 +131,12 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["ssh/terminal"]
+  revision = "91a49db82a88618983a78a06c1cbd4e00ab749ab"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -132,6 +144,15 @@
     "idna"
   ]
   revision = "22ae77b79946ea320088417e4d50825671d82d57"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = [
+    "unix",
+    "windows"
+  ]
+  revision = "dd2ff4accc098aceecb86b36eaa7829b2a17b1c9"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -173,6 +194,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cf2f31790a8fa6853028130c41b624b02d56bffadb6c488cabb443ef371fc703"
+  inputs-digest = "4bddbfcf12123488882158cae62076a7c22b7e43669df3baa14edcb4bddb9af4"
   solver-name = "gps-cdcl"
   solver-version = 1

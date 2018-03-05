@@ -1,11 +1,10 @@
 package jupiter
 
 import (
-	"errors"
 	"io/ioutil"
-	"log"
 	"os"
 
+	"github.com/home-IoT/jupiter/internal/log"
 	"github.com/home-IoT/jupiter/server/restapi/operations"
 	"gopkg.in/yaml.v2"
 )
@@ -56,24 +55,24 @@ func Configure(api *operations.JupiterAPI) {
 	loadSensorsConfig(options.ConfigFile)
 }
 
-func loadSensorsConfig(configFile string) (*jupiterConfig, error) {
+func loadSensorsConfig(configFile string) {
 
 	file, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		return nil, err
+		log.Debugf("%v", err)
+		log.Exitf(1, "Error loading the configuration file.")
 	}
 
 	config := new(jupiterConfigYAML)
 
 	err = yaml.Unmarshal(file, config)
 	if err != nil {
-		log.Println(err)
-		return nil, errors.New("error loading the configuration file")
+		log.Debugf("%v", err)
+		log.Exitf(1, "Error loading the configuration file.")
 	}
 
 	configuration = processConfigYAML(config)
 
-	return configuration, nil
 }
 
 func processConfigYAML(yamlConfig *jupiterConfigYAML) *jupiterConfig {

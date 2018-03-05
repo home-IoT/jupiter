@@ -32,14 +32,6 @@ jobs:
             - release/jupiter-linux-arm7.sha256
             - release/jupiter-windows-386.exe
             - release/jupiter-windows-386.exe.sha256
-            - release/dht22-mock-darwin-amd64
-            - release/dht22-mock-darwin-amd64.sha256
-            - release/dht22-mock-linux-amd64
-            - release/dht22-mock-linux-amd64.sha256
-            - release/dht22-mock-linux-arm7
-            - release/dht22-mock-linux-arm7.sha256
-            - release/dht22-mock-windows-386
-            - release/dht22-mock-windows-386.sha256
           skip_cleanup: true
           on:
             repo: home-IoT/jupiter

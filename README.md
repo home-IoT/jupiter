@@ -41,14 +41,12 @@ Before using the service definition, make sure that you go through the file and 
 The sensors are expected to expose their readings as a JSON response to a simple HTTP GET endpoint defined by the [`api/client.yml`](api/client.yml) Swagger specficitiaon. 
 
 ### Mock Sensor
-There is a mock sensor that offers a constant reading that conforms to the sensor API specificaiton. You can use this for testing. 
+The [home-IoT/esp-dht22-mock](https://github.com/home-IoT/esp-dht22-mock) projects offers a mock sensor service. You can run a number of instances on your local network and test/play with the Jupiter service against the mock sensors. 
 
-### Run Mock Sensor Service
-You can build and run the mock service using the Makefile:
+To run the server with the configuration provided in [config/test.yml](config/test.yml), run one mock sensor on port `8081` of your machine:
 ```
-make go-build-mock run-mock
+dht22-mock --port 8081
 ```
-This will build and run the mock code. 
 
 ## License
 The code is published under an [MIT license](LICENSE.md). 

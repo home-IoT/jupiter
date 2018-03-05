@@ -61,6 +61,14 @@
   name = "github.com/tylerb/graceful"
   version = "1.2.15"
 
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/net"
+
+[[constraint]]
+  name = "gopkg.in/yaml.v2"
+  version = "2.1.1"
+
 [prune]
   go-tests = true
   unused-packages = true

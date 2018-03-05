@@ -209,7 +209,9 @@ func copyClientSensorDataToServerSensorData(config *sensorConfig, src *clientMod
 	} else {
 		dest.HeatIndex = 0
 	}
-	dest.HeatIndex = *src.Dht22.HeatIndex
+	if src.Dht22.HeatIndex != nil {
+		dest.HeatIndex = *src.Dht22.HeatIndex
+	}
 	dest.Temperature = src.Dht22.Temperature
 	dest.Humidity = src.Dht22.Humidity
 	dest.DeltaTime = src.DeltaTime

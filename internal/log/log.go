@@ -7,9 +7,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-/*
-	initialize the log supporting debug and non-debug mode
-*/
+// InitLog initialize the log supporting debug and non-debug mode
 func InitLog(debug bool) {
 	log.SetOutput(os.Stdout)
 	if debug {

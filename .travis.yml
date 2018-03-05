@@ -4,39 +4,38 @@ notifications:
   email: false
 jobs:
   include:
-    - stage: test
-      go_import_path: github.com/home-IoT/jupiter
-      install:
-        - make get-tools
-      os: linux
-      go: 1.9.x
-      script:
-        - make go-dep go-validate
-    - go: 1.9.x
-      stage: deploy
-      go_import_path: github.com/home-IoT/jupiter
-      install: skip
-      script: skip
-      before_deploy:
-        - make clean get-tools go-dep go-release-all
-      deploy:
-        - provider: releases
-          api_key:
-            secure: IKxJFt4L+kUjlsq68LsfnTUTr9/Nm81DPJOaEvWhNeCrE16vfGg4DLqEF0BtCa1aMEpWc5CoYXNq06DKHpX3bKa2fhFV5wo7D9RbI+FO5KMELvO8+SsSkLGTS8fGP+CkycTrSZnlq7DNt2hUT+2a88VhCeMHzBxICTge/ptLc3NQpvfHxrgqclGIPjnGEOxyJVyzyN11fJGsyWWBxzNRUWxfPlheKNB8wvtBBM3jorIjgsm+1sHVyCQVUpB9RnY/zbEaESUT0AfNkAtoY8c1uoVI9W+wsPlgqow3swkihxEYtcIHjg562txAUZjOeZSt5mfi1vSnp9UCj5SVnCeyTzGbe+EjnloRlZsoWlz0/PmmhRe01D1KXOmU8CgRnnv4dEKtLOhYP/LDZdBrIYYB4tN67Exmb9LnipedYQlEJOXAZIvXLudb/df7sNr7NNWfs4pK96upk36R+ExygTtIP0tnalxJSvOrvq69LZ9OKVaQjPW/LJlp49uaDY0/XHGw2jWNfIp9ooFRScfXUNGg5BNYdjdyxMtHk3pQ3CDUhsCHtXr5BJ/Ssmr/4Bwu+PHMQ+hdUyYN5dicUjU45kEmDJOPHgcx7gl9hPNIMxGoWa5nsRiy+tM3NeaibkcM9EKEVHEls+zF3nSE0/Mjp1aIC1J5Mau9+4NhSHesjvGt+LI=
-          file:
-            - release/jupiter-darwin-amd64
-            - release/jupiter-darwin-amd64.sha256
-            - release/jupiter-linux-amd64
-            - release/jupiter-linux-amd64.sha256
-            - release/jupiter-linux-arm7
-            - release/jupiter-linux-arm7.sha256
-            - release/jupiter-windows-386.exe
-            - release/jupiter-windows-386.exe.sha256
-          skip_cleanup: true
-          on:
-            repo: home-IoT/jupiter
-            branch: develop
-            tags: true
+  - stage: test
+    go_import_path: github.com/home-IoT/jupiter
+    install:
+    - make get-tools
+    os: linux
+    go: 1.9.x
+    script:
+    - make go-dep go-validate
+  - go: 1.9.x
+    stage: deploy
+    go_import_path: github.com/home-IoT/jupiter
+    install: skip
+    script: skip
+    before_deploy:
+    - make clean get-tools go-dep go-release-all
+    deploy:
+    - provider: releases
+      api_key:
+        secure: v8wI4C0ZeLa4YZXp/w7uKzFUEtkDG37rKMWzGObqd6ZEJqwRnmg3bYGK4NZwamQAVc9t8VA1UbiG22KYyh22sF91CoYqoLRaIcnoo1uR0OEganhRk77AouwX3jFPrEAfrvGz+hIoTKzZ/ZlpbT3YKRZ+QnYj/Gpz/TT8jR4dXEh6zcfsaSU4dAuea5DxH/XgZqaWDfUKTRLEp2zMsdaSgNgcmZgRMJMNHYFxd481/TIUZG0f6JaTFIq0hKBwqy051NNImy7QLut5rJ7HzfSkKBkcY6TFqC8VCAroOLB/TAaIBho8fSAcAhqxaytpmrJh/GqjbAMROSaqxIY8riK9yMWsSyQZ67yRxzv62s3vEgOJsUIl5E9MmqEOf2eMx0PmCYPQSwQvEXGtqpE98ShUwXdDCWuVismwdZAf/UFDmOVZjkxcIRtTEzEa++9RtIQn8XKrDhXwMdrL5bg6lyTsUJZYfem6S9X9WzopD+af8pp3XziJSre1Vq/A+z0eeF3AboxAX1MRRN3aO8KaEnugHvjO/eB3ahb2Y26xMpGo89f7vNwo2vJl+HX9/mQwV9tdm6W3sNXctrM0jb5dEx9dkVlKimZjlAIpZWWVFo7AWQfUTJ00SITfwYHXcvWzcuz39+5ucoghByadm1LBVqQ8PFW7dT2FWhaxU/3IrNBDglo=
+      file:
+      - release/jupiter-darwin-amd64
+      - release/jupiter-darwin-amd64.sha256
+      - release/jupiter-linux-amd64
+      - release/jupiter-linux-amd64.sha256
+      - release/jupiter-linux-arm7
+      - release/jupiter-linux-arm7.sha256
+      - release/jupiter-windows-386.exe
+      - release/jupiter-windows-386.exe.sha256
+      skip_cleanup: true
+      on:
+        repo: home-IoT/jupiter
+        branch: develop
+        tags: true
 addons:
   ssh_known_hosts: github.com
-
